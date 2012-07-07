@@ -1,0 +1,38 @@
+
+To run the eagle/construct code, you need to install the "construct" framework,
+for docs on construct see:
+
+http://construct.wikispaces.com/
+https://github.com/construct/construct
+http://en.wikipedia.org/wiki/Construct_%28python_library%29
+http://construct.readthedocs.org/
+
+What can be done right now is:
+
+
+If you have eagle 6.1 installed on a linux system, this will do:
+ * let eagle translate the given schematics file from the old version to the 6.1 XML version;
+ * use the construct code to convert to the same 6.1 version;
+ * diff the 2 XML files;
+You can use this as an "oracle" for the correctness of the construct parser:
+
+python upconvert/construct/eagle/xml_diff.py --eagle-path=/home/csaba/deploy/eagle test/eagle/Arduino%20Nano2.sch
+
+
+This will dump all eagle records as they are, without any presumtions about
+higher level structure between records, and will include the row data too:
+
+python upconvert/construct/eagle/dump.py test/eagle/I2C%203-axis%20Compass.sch -R |less
+
+
+This one has some limited structure presumtions about variable length records:
+
+python upconvert/construct/eagle/dump.py test/eagle/I2C%203-axis%20Compass.sch -F |less
+
+
+This one has strong presumtions about the high level structure of the records,
+and parses the record stream in the hierarchical structure which is then used
+when writing out the eagle XML format:
+
+python upconvert/construct/eagle/dump.py test/eagle/I2C%203-axis%20Compass.sch -D |less
+
